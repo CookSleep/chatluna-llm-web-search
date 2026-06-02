@@ -1,7 +1,7 @@
 {
     "name": "koishi-plugin-chatluna-llm-web-search",
     "description": "为 ChatLuna 提供基于模型内置搜索能力的 Web Search、Web Read、X Search 与 X Read 工具",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "homepage": "https://github.com/CookSleep/chatluna-llm-web-search",
     "repository": {
         "type": "git",
