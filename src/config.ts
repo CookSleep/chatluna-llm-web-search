@@ -233,11 +233,11 @@ export const usage = `## chatluna-llm-web-search
 **最适合非网络热梗的正经搜索**
 
 如果需要使用 GPT 模型作为搜索服务使用的模型，需要：
-1. 安装 \`chatluna-openai-adapter\`
+1. 安装 \`chatluna-openai-adapter\` 或 \`chatluna-openai-like-adapter\`
 2. 完成 API URL、API Key 配置
 3. 在“模型配置”中启用 \`responsesApi\`
 4. 在“模型配置”中将 \`maxContextRatio\` 拉满
-5. 使用来自 OpenAI 适配器且 ID 以 \`gpt-\` 开头的模型。本插件会自动为 Web Search 附加 \`web_search\`，无需在 OpenAI 适配器的“其他设置”中启用 \`web_search\` 或维护 \`responseBuiltinToolSupportModel\`。
+5. 使用 ID 以 \`gpt-\` 开头的模型。本插件会自动为 Web Search 附加 \`web_search\`，无需在适配器的“其他设置”中启用 \`web_search\` 或维护 \`responseBuiltinToolSupportModel\`。
 
 ### Gemini
 

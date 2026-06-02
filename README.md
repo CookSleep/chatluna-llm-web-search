@@ -42,7 +42,7 @@
 
 根据你选择的搜索模型，请先完成对应适配器配置：
 
-- GPT：安装 `chatluna-openai-adapter`，启用 `responsesApi`，并将 `maxContextRatio` 拉满。
+- GPT：安装 `chatluna-openai-adapter` 或 `chatluna-openai-like-adapter`，启用 `responsesApi`，并将 `maxContextRatio` 拉满。
 - Gemini：安装 `chatluna-google-gemini-adapter`，启用 `googleSearch` 与 `urlContext`，并将 `maxContextRatio` 拉满。
 - Grok：安装 `chatluna-openai-like-adapter`，启用 `responsesApi`，并使用 ID 以 `grok-` 开头的模型。
 
