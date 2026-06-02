@@ -523,13 +523,9 @@ function buildOverrideRequestParams(
     chatModel: any
 ) {
     const { lowerModelName } = getModelIdentity(configuredModel, chatModel)
-    const llmType = String(chatModel._llmType?.() || '').toLowerCase()
-    const responseApi = chatModel._requester?._pluginConfig?.responseApi === true
 
     if (
         deps.action === 'web_search' &&
-        llmType === 'openai' &&
-        responseApi &&
         lowerModelName.startsWith('gpt-')
     ) {
         return {
@@ -539,8 +535,6 @@ function buildOverrideRequestParams(
 
     if (
         deps.cfg.grokBuiltinTools.enable &&
-        llmType === 'openai' &&
-        responseApi &&
         lowerModelName.startsWith('grok-')
     ) {
         return {
