@@ -120,17 +120,12 @@ function getModelIdentity(configuredModel: string, chatModel: any) {
     }
 }
 
-function getConfiguredModelName(configuredModel: string) {
-    const slashIndex = configuredModel.indexOf('/')
-    return slashIndex >= 0 ? configuredModel.slice(slashIndex + 1) : configuredModel
-}
-
 function isUsableModel(model: string) {
     return Boolean(model && model !== '无')
 }
 
 function isGrokModel(model: string) {
-    return getConfiguredModelName(model).toLowerCase().startsWith('grok-')
+    return model.toLowerCase().includes('grok')
 }
 
 function getModelCandidates(model: { model: string; fallbackModel?: string }) {
@@ -146,7 +141,7 @@ function validateXModelCandidates(candidates: string[]) {
 
     const invalid = candidates.find((model) => !isGrokModel(model))
     if (invalid) {
-        throw new Error(`X Search / X Read 只支持 ID 以 grok- 开头的模型：${invalid}`)
+        throw new Error(`X Search / X Read 只支持 ID 包含 grok 的模型：${invalid}`)
     }
 }
 
@@ -535,7 +530,7 @@ function buildOverrideRequestParams(
 
     if (
         deps.cfg.grokBuiltinTools.enable &&
-        lowerModelName.startsWith('grok-')
+        lowerModelName.includes('grok')
     ) {
         return {
             tools: buildGrokTools(deps.cfg, deps.action)

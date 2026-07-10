@@ -259,7 +259,7 @@ export const usage = `## chatluna-llm-web-search
 2. 完成 API URL、API Key 配置
 3. 在“模型配置”中启用 \`responsesApi\`
 4. 在“模型配置”中将 \`maxContextRatio\` 拉满
-5. 使用 ID 以 \`grok-\` 开头的模型，并在本插件的“Grok 内置工具配置”中启用相关的 Grok 内置工具（使用官方 API 时）。
+5. 使用 ID 包含 \`grok\` 的模型，并在本插件的“Grok 内置工具配置”中启用相关的 Grok 内置工具（使用官方 API 时）。
 
 使用逆向服务（如 [**chenyme/grok2api**](https://github.com/chenyme/grok2api)）时，建议关闭本插件的“Grok 内置工具配置”中的 \`grokBuiltinTools\` 选项，相关项目默认会自行提供等价的功能。
 

@@ -18,7 +18,7 @@
 
 ### 3. 🐦 X Search / X Read
 - 支持通过 Grok 模型搜索或读取 X/Twitter 内容。
-- X Search 与 X Read 仅允许使用 ID 以 `grok-` 开头的模型，首选模型与备选模型都会校验。
+- X Search 与 X Read 仅允许使用 ID 包含 `grok` 的模型，首选模型与备选模型都会校验。
 - 可配置 Grok 内置 `web_search` / `x_search` 工具能力，包括图片理解、视频理解和 Web Search 时附加 X Search。
 
 ### 4. 🖼️ 图片描述服务
@@ -44,7 +44,7 @@
 
 - GPT：安装 `chatluna-openai-adapter` 或 `chatluna-openai-like-adapter`，启用 `responsesApi`，并将 `maxContextRatio` 拉满。
 - Gemini：安装 `chatluna-google-gemini-adapter`，启用 `googleSearch` 与 `urlContext`，并将 `maxContextRatio` 拉满。
-- Grok：安装 `chatluna-openai-like-adapter`，启用 `responsesApi`，并使用 ID 以 `grok-` 开头的模型。
+- Grok：安装 `chatluna-openai-like-adapter`，启用 `responsesApi`，并使用 ID 包含 `grok` 的模型。
 
 建议关闭其他插件、MCP 或 Skills 提供的搜索与网页读取工具，避免模型在工具选择时混淆。
 
