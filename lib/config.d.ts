@@ -10,10 +10,10 @@ export interface Config {
         model: string;
         fallbackModel: string;
     };
-    webSearchTool: ToolConfig;
+    webSearchTool: AgentToolConfig;
     webReadTool: ToolConfig;
-    xSearchTool: ToolConfig;
-    xReadTool: ToolConfig;
+    xSearchTool: AgentToolConfig;
+    xReadTool: AgentToolConfig;
     grokBuiltinTools: {
         enable: boolean;
         imageUnderstanding: boolean;
@@ -39,6 +39,9 @@ export interface ToolConfig {
     enable: boolean;
     name: string;
     description: string;
+}
+/** 需要调用模型的工具；Web Read 直接走 Jina Reader，没有系统提示。 */
+export interface AgentToolConfig extends ToolConfig {
     prompt: string;
 }
 export declare const Config: Schema<Config>;

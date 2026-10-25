@@ -12,10 +12,10 @@ export interface Config {
         model: string
         fallbackModel: string
     }
-    webSearchTool: ToolConfig
+    webSearchTool: AgentToolConfig
     webReadTool: ToolConfig
-    xSearchTool: ToolConfig
-    xReadTool: ToolConfig
+    xSearchTool: AgentToolConfig
+    xReadTool: AgentToolConfig
     grokBuiltinTools: {
         enable: boolean
         imageUnderstanding: boolean
@@ -42,6 +42,10 @@ export interface ToolConfig {
     enable: boolean
     name: string
     description: string
+}
+
+/** 需要调用模型的工具；Web Read 直接走 Jina Reader，没有系统提示。 */
+export interface AgentToolConfig extends ToolConfig {
     prompt: string
 }
 
@@ -49,13 +53,6 @@ const DEFAULT_WEB_SEARCH_PROMPT = `你是一个搜索引擎 Agent。针对用户
 要求：
 - 引用来源时附上原始 URL
 - 保留关键数据、引用和图片 URL
-- 图片 URL 使用纯 URL 输出，不要使用 Markdown 链接或图片语法，不要描述图片内容
-- 不要寒暄或提出后续建议——你的输出将直接作为另一个 AI Agent 的参考信息`
-
-const DEFAULT_WEB_READ_PROMPT = `你是一个网页读取 Agent。将用户给出的 URL 内容整理为简体中文 Markdown。
-要求：
-- 只处理用户提供的 URL，不要自行搜索其他内容
-- 保留页面标题、正文要点、重要引用、图片 URL
 - 图片 URL 使用纯 URL 输出，不要使用 Markdown 链接或图片语法，不要描述图片内容
 - 不要寒暄或提出后续建议——你的输出将直接作为另一个 AI Agent 的参考信息`
 
@@ -122,11 +119,7 @@ export const Config: Schema<Config> = Schema.intersect([
             name: Schema.string().default('web_read').description('工具名称'),
             description: Schema.string()
                 .default('读取链接，并返回对应的 Markdown 版本。')
-                .description('工具描述'),
-            prompt: Schema.string()
-                .role('textarea')
-                .default(DEFAULT_WEB_READ_PROMPT)
-                .description('Web Read 系统提示')
+                .description('工具描述')
         }).description('Web Read')
     }),
     Schema.object({

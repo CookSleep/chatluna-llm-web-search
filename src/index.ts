@@ -9,7 +9,7 @@ import {
     getMessageContent
 } from 'koishi-plugin-chatluna/utils/string'
 import { z } from 'zod'
-import { name, type Config, type ToolConfig } from './config'
+import { name, type AgentToolConfig, type Config, type ToolConfig } from './config'
 
 export { Config, inject, name, usage } from './config'
 
@@ -39,7 +39,7 @@ type Deps = {
     ctx: Context
     cfg: Config
     action: 'web_search' | 'web_read' | 'x_search' | 'x_read'
-    tool: ToolConfig
+    tool: ToolConfig | AgentToolConfig
     ensureModelRef: (target?: string) => Promise<ModelRef | undefined>
     ensureImageModelRef: () => Promise<ModelRef | undefined>
 }
@@ -445,7 +445,8 @@ async function run(
             )
         }
 
-        const result = await callModel(deps, input)
+        // 只有 Web Read 没有系统提示，它在上面已经返回。
+        const result = await callModel(deps as Deps & { tool: AgentToolConfig }, input)
         return await withImages(deps.ctx, deps.cfg, result, deps.ensureImageModelRef)
     } catch (err) {
         if (deps.cfg.debug) {
@@ -456,7 +457,7 @@ async function run(
 }
 
 async function callModel(
-    deps: Deps,
+    deps: Deps & { tool: AgentToolConfig },
     input: { query?: string; url?: string }
 ) {
     const model = deps.action.startsWith('x_')
@@ -562,16 +563,6 @@ function buildGrokTools(
                       }
                   ]
                 : [])
-        ]
-    }
-
-    if (action === 'web_read') {
-        return [
-            {
-                type: 'web_search',
-                enable_image_understanding:
-                    cfg.grokBuiltinTools.imageUnderstanding
-            }
         ]
     }
 
