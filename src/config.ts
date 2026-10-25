@@ -219,50 +219,42 @@ export const Config: Schema<Config> = Schema.intersect([
 ])
 
 export const usage = `## chatluna-llm-web-search
-为 ChatLuna 提供 Web Search、Web Read、X Search、X Read 工具，请在使用时尽量关闭其他插件或 MCP、Skills 提供的搜索、网页读取工具。
+为 ChatLuna 提供 Web Search、Web Read、X Search、X Read 工具。使用时请尽量关闭其他插件或 MCP、Skills 提供的搜索与网页读取工具。
+
+### 工具
+- 所有工具默认不注册，请在对应配置中按需启用。
+- Web Search：调用“Web 搜索模型配置”中的模型进行联网搜索，首选模型失败时会改用备选模型。
+- Web Read：通过 Jina Reader 读取网页并返回 Markdown，不调用模型。
+- X Search / X Read：调用“X 搜索/读取模型配置”中的模型，仅支持 ID 包含 \`grok\` 的模型。
 
 ### GPT
-
-**最适合非网络热梗的正经搜索**
-
-如果需要使用 GPT 模型作为搜索服务使用的模型，需要：
-1. 安装 \`chatluna-openai-adapter\` 或 \`chatluna-openai-like-adapter\`
-2. 完成 API URL、API Key 配置
-3. 在“模型配置”中启用 \`responsesApi\`
-4. 在“模型配置”中将 \`maxContextRatio\` 拉满
+适合非网络热梗的正经搜索。使用 GPT 模型作为搜索模型时，需要：
+1. 安装 \`chatluna-openai-adapter\` 或 \`chatluna-openai-like-adapter\`。
+2. 完成 API URL、API Key 配置。
+3. 在“模型配置”中启用 \`responsesApi\`。
+4. 在“模型配置”中将 \`maxContextRatio\` 拉满。
 5. 使用 ID 以 \`gpt-\` 开头的模型。本插件会自动为 Web Search 附加 \`web_search\`，无需在适配器的“其他设置”中启用 \`web_search\` 或维护 \`responseBuiltinToolSupportModel\`。
 
 ### Gemini
-
-**效果一般，只适合搜索最新的新闻，或是当做备用/无奈之选，并且该模型无法给出引用的 URL。就算将 API 返回的引用 URL 拼接到上下文中，也只能自行打开需要跳转一次的追踪链接。**
-
-如果需要使用 Gemini 模型作为搜索服务使用的模型，需要：
-1. 安装 \`chatluna-google-gemini-adapter\`
-2. 完成 API URL、API Key 配置
-3. 在“模型配置”中启用 \`googleSearch\` 和 \`urlContext\`
-4. 在“模型配置”中将 \`maxContextRatio\` 拉满
-5. 由于 Gemini API 不完全支持在开启内置工具的情况下使用自定义工具，请为其他插件创建独立的 \`chatluna-google-gemini-adapter\` 配置（可点击配置界面右上角的“克隆配置”，并在新的配置中关闭 \`googleSearch\` 和 \`urlContext\`）。
+效果一般，只适合搜索最新新闻，或作为备选。该模型无法给出引用的原始 URL，API 返回的引用 URL 是需要跳转一次的追踪链接。使用 Gemini 模型作为搜索模型时，需要：
+1. 安装 \`chatluna-google-gemini-adapter\`。
+2. 完成 API URL、API Key 配置。
+3. 在“模型配置”中启用 \`googleSearch\` 和 \`urlContext\`。
+4. 在“模型配置”中将 \`maxContextRatio\` 拉满。
+5. 由于 Gemini API 不完全支持在开启内置工具时使用自定义工具，请为其他插件创建独立的 \`chatluna-google-gemini-adapter\` 配置：点击配置界面右上角的“克隆配置”，并在新配置中关闭 \`googleSearch\` 和 \`urlContext\`。
 
 ### Grok
+大部分情况下的首选，适合处理网络热梗，可以获取 X 平台信息，搜索速度快，但处理复杂请求时弱于 GPT。使用 Grok 模型作为搜索模型时，需要：
+1. 安装 \`chatluna-openai-like-adapter\`。
+2. 完成 API URL、API Key 配置。
+3. 在“模型配置”中启用 \`responsesApi\`。
+4. 在“模型配置”中将 \`maxContextRatio\` 拉满。
+5. 使用 ID 包含 \`grok\` 的模型；使用官方 API 时，在本插件的“Grok 内置工具配置”中启用所需的内置工具。
 
-**大部分情况下的最佳首选模型，适合处理网络热梗，且可以获取 X 平台信息，搜索效果又快又好，但在处理复杂请求时表现弱于 GPT**
-
-如果需要使用 Grok 模型作为搜索服务使用的模型，需要：
-1. 安装 \`chatluna-openai-like-adapter\`
-2. 完成 API URL、API Key 配置
-3. 在“模型配置”中启用 \`responsesApi\`
-4. 在“模型配置”中将 \`maxContextRatio\` 拉满
-5. 使用 ID 包含 \`grok\` 的模型，并在本插件的“Grok 内置工具配置”中启用相关的 Grok 内置工具（使用官方 API 时）。
-
-使用逆向服务（如 [**chenyme/grok2api**](https://github.com/chenyme/grok2api)）时，建议关闭本插件的“Grok 内置工具配置”中的 \`grokBuiltinTools\` 选项，相关项目默认会自行提供等价的功能。
-
-### X Search/Read
-仅支持 Grok 模型。
+使用逆向服务（如 [**chenyme/grok2api**](https://github.com/chenyme/grok2api)）时，建议关闭“Grok 内置工具配置”中的 \`enable\`，这类项目通常会自行提供等价功能。
 
 ### Jina Reader
-Jina Reader 只用于 Web Read 的网页读取。默认无需 API Key 即可使用，但如果你遇到速率限制，仍需前往 [**官网**](https://jina.ai/reader) 获取 API Key 并在本插件中配置。
+Jina Reader 只用于 Web Read。默认无需 API Key，遇到速率限制时，可前往[**官网**](https://jina.ai/reader)获取 API Key 并填入本插件。
 
 ### 图片描述
-开启“图片描述服务”后，会自动处理搜索/读取结果中出现的图片 URL，调用所选 ChatLuna 多模态模型生成描述，并将原文中的图片 URL 替换为带描述的 Markdown 链接。
-
-如果未开启“图片描述服务”，则搜索/读取结果中不会包含图片的文本描述信息，只有 URL。`
+开启“图片描述服务”并选择多模态模型后，插件会处理搜索/读取结果中的图片 URL，生成描述并将原文中的图片 URL 替换为带描述的 Markdown 链接。未开启时，结果中只保留图片 URL，不含文本描述。`
